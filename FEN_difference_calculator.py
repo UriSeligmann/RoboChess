@@ -102,7 +102,7 @@ def difference_based_infer_fen(initial_fen, color_only_board):
         board.set_piece_at(to_sq, piece)
 
     # -----------------------------------------------------
-    #   2 squares changed => normal or capture
+    #   Two squares changed => normal or capture
     # -----------------------------------------------------
     if num_diffs == 2:
         (r1, c1, oldC1, newC1) = diffs[0]
