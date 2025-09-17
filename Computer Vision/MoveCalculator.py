@@ -1,7 +1,7 @@
 import chess
 
 # -----------------------------------------------------------------------------
-#  UTILITY: Converting a python-chess Board => 8×8 color layout
+#  UTILITY: Converting a python-chess Board => 8x8 color layout
 # -----------------------------------------------------------------------------
 def board_to_color_layout(board: chess.Board):
     """
@@ -162,7 +162,6 @@ def difference_based_infer_fen(initial_fen, color_only_board):
         if not king_from or not rook_from:
             raise ValueError("Did not find exactly one King and one Rook among the from-squares.")
 
-        # --- FIX: identify the king's to-square by the 2-file shift ---
         king_from_sq = array_to_square(*king_from)
         king_from_file = chess.square_file(king_from_sq)
 
@@ -196,26 +195,3 @@ def difference_based_infer_fen(initial_fen, color_only_board):
     else:
         # More or fewer => no single standard move
         raise ValueError(f"{num_diffs} squares changed => no single (non-EP) move can do that.")
-
-if __name__ == "__main__":
-    # A simple position with Black to move and possibly castle short
-    arbitrary_fen = "4k2r/8/8/8/8/8/8/4K2R b - - 0 1"
-
-    # Next color layout indicates black O-O: King on g8, Rook on f8
-    # row=0 => rank=8 => columns: e8->None, f8->B, g8->B, h8->None
-    color_only_after = [
-        [None, None, None, None, None, 'B', None, 'B'],
-        [None, None, None, None, None, None, None, None], 
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, 'W', None, None, 'W'],
-    ]
-
-    try:
-        resulting_fen = difference_based_infer_fen(arbitrary_fen, color_only_after)
-        print("Resulting FEN:", resulting_fen)
-    except ValueError as e:
-        print("No single-move explanation:", e)

@@ -1,0 +1,13 @@
+train: C:/Users/urise/OneDrive/Desktop/Chess/Training/train/images
+val: C:/Users/urise/OneDrive/Desktop/Chess/Training/valid/images
+test: C:/Users/urise/OneDrive/Desktop/Chess/Training/test/images
+
+nc: 12
+names: ['Black-Bishop', 'Black-King', 'Black-Knight', 'Black-Pawn', 'Black-Queen', 'Black-Rook', 'White-Bishop', 'White-King', 'White-Knight', 'White-Pawn', 'White-Queen', 'White-Rook']
+
+roboflow:
+  workspace: block
+  project: chess-pieces-wrdbb
+  version: 3
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/block/chess-pieces-wrdbb/dataset/3

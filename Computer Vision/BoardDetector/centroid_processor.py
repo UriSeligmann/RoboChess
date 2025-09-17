@@ -1,9 +1,6 @@
 import numpy as np
 from typing import List, Tuple, Optional
 
-from .debugger import Debugger
-from .wrapper_decorators import debug_entry_exit_method
-
 # =============================================
 #      CENTROID FILTERING & ORDERING
 # =============================================
@@ -14,16 +11,13 @@ class CentroidProcessor:
     """
 
     def __init__(self,
-                 min_distance: float = 50.0,
-                 debugger: Optional[Debugger] = None) -> None:
+                 min_distance: float = 50.0) -> None:
         self.min_distance = min_distance
-        self.debugger = debugger
 
     # ------------------------------------------------------------------
     # 1     Non‑max suppression – keep at most four strong, well separated
     #       detections.
     # ------------------------------------------------------------------
-    @debug_entry_exit_method(level=2)
     def filter_centroids(self,
                          centroids: List[Tuple[float, float]],
                          confidences: np.ndarray
@@ -40,8 +34,6 @@ class CentroidProcessor:
                 picked.append(c)
             if len(picked) == 4:
                 break
-        if self.debugger:
-            self.debugger.log(f"Centroids kept after filtering: {len(picked)}", level=0)
         return picked
 
     # ------------------------------------------------------------------
@@ -54,6 +46,8 @@ class CentroidProcessor:
             return pts
         if len(pts) != 3:
             raise ValueError("Need 3 or 4 points to infer the fourth corner.")
+        
+        print("Infering fourth corner from three points...")
 
         arr = np.asarray(pts, dtype=np.float32)
 
@@ -94,8 +88,6 @@ class CentroidProcessor:
             if score < best_score:
                 best_score, best_quad = score, quad
 
-        if self.debugger:
-            self.debugger.log(f"Synthetic corner chosen (score ≈ {best_score:.3f})", level=1)
         return self._order_four(best_quad)
 
     # ------------------------------------------------------------------
@@ -112,7 +104,6 @@ class CentroidProcessor:
     # ------------------------------------------------------------------
     # 4  Public entry – always returns exactly four corners ordered TL,TR,BR,BL
     # ------------------------------------------------------------------
-    @debug_entry_exit_method(level=2)
     def order_centroids(self, centroids: List[Tuple[float, float]]) -> List[Tuple[float, float]]:
         centroids = self._infer_fourth_corner(list(centroids))
         pts = np.asarray(centroids, dtype=np.float32)
